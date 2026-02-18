@@ -1,16 +1,14 @@
 import { NextResponse } from 'next/server';
 import { generateSlideImage } from '@/lib/image-generator';
-import { uploadToS3 } from '@/lib/s3';
 import { sendCarouselEmail } from '@/lib/resend';
 import archiver from 'archiver';
 import { Slide } from '@/types';
-import { supabase } from '@/lib/supabase';
-import { auth } from '@clerk/nextjs/server';
+import { currentUser } from '@clerk/nextjs/server';
 
 export async function POST(req: Request) {
     try {
-        const { userId } = await auth();
-        if (!userId) {
+        const user = await currentUser();
+        if (!user) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
@@ -20,9 +18,17 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Missing slides or email' }, { status: 400 });
         }
 
+        const userData = {
+            id: user.id,
+            clerkId: user.id,
+            email: user.emailAddresses[0]?.emailAddress || "",
+            name: `${user.firstName} ${user.lastName}`.trim() || "User",
+            imageUrl: user.imageUrl
+        };
+
         // 1. Generate Images
         const imageBuffers = await Promise.all(
-            slides.map((s: Slide, i: number) => generateSlideImage(s, i))
+            slides.map((s: Slide, i: number) => generateSlideImage(s, i, userData, slides.length))
         );
 
         // 2. Create ZIP
@@ -44,24 +50,10 @@ export async function POST(req: Request) {
 
         const zipBuffer = Buffer.concat(chunks);
 
-        // 3. Upload to S3
-        const fileName = `temp/${userId}/${Date.now()}-carousel.zip`;
-        const downloadUrl = await uploadToS3(zipBuffer, fileName, 'application/zip');
+        // 3. Send Email with Attachment (No S3/Supabase needed)
+        await sendCarouselEmail(email, zipBuffer);
 
-        // 4. Send Email
-        await sendCarouselEmail(email, downloadUrl);
-
-        // 5. Log to Supabase
-        // Note: This might fail if the 'generations' table doesn't exist yet, 
-        // but we proceed anyway for the MVP flow.
-        await supabase.from('generations').insert({
-            user_id: userId,
-            email,
-            zip_url: downloadUrl,
-            status: 'completed'
-        });
-
-        return NextResponse.json({ success: true, downloadUrl });
+        return NextResponse.json({ success: true });
 
     } catch (error) {
         console.error('Delivery error:', error);

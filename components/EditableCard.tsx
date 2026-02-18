@@ -48,53 +48,61 @@ export function EditableCard({ slide, index, onUpdate, onRemove }: EditableCardP
             </CardHeader>
 
             <CardContent className="space-y-4 p-4">
-                {/* Image Area */}
-                <div className="group relative aspect-square w-full overflow-hidden rounded-md bg-neutral-100 border border-dashed border-neutral-300 flex items-center justify-center">
-                    {slide.image ? (
-                        <>
-                            <Image
-                                src={slide.image}
-                                alt="Slide visual"
-                                fill
-                                className="object-cover"
-                            />
-                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                                <Button variant="secondary" size="sm" onClick={() => fileInputRef.current?.click()}>
-                                    Change
-                                </Button>
-                                <Button variant="destructive" size="sm" onClick={() => onUpdate(slide.id, { image: undefined, file: undefined })}>
-                                    Remove
-                                </Button>
-                            </div>
-                        </>
-                    ) : (
-                        <div className="flex flex-col items-center gap-2 text-neutral-400">
-                            <ImageIcon className="h-8 w-8" />
-                            <div className="flex gap-2">
-                                <Button variant="outline" size="sm" onClick={() => fileInputRef.current?.click()}>
-                                    <Upload className="mr-2 h-3 w-3" /> Upload
-                                </Button>
-                                <Button variant="ghost" size="sm" disabled title="Coming soon">
-                                    <Sparkles className="mr-2 h-3 w-3" /> Generate
-                                </Button>
-                            </div>
-                        </div>
-                    )}
-                    <input
-                        type="file"
-                        ref={fileInputRef}
-                        className="hidden"
-                        accept="image/*"
-                        onChange={handleImageUpload}
-                    />
-                </div>
-
-                {/* Text Area */}
+                {/* Text Area (Primary) */}
                 <Textarea
-                    placeholder="Write your engaging text here..."
-                    className="min-h-[100px] resize-none border-neutral-200 focus-visible:ring-black text-base"
+                    placeholder="Escreva seu texto aqui..."
+                    className="min-h-[120px] resize-none border-none bg-transparent p-0 text-lg focus-visible:ring-0 shadow-none"
                     value={slide.content}
                     onChange={(e) => onUpdate(slide.id, { content: e.target.value })}
+                />
+
+                {/* Media Attachment Area */}
+                {slide.image ? (
+                    <div className="relative mt-4 aspect-video w-full overflow-hidden rounded-md border border-neutral-200">
+                        <Image
+                            src={slide.image}
+                            alt="Slide visual"
+                            fill
+                            className="object-cover"
+                        />
+                        <div className="absolute right-2 top-2 z-10 flex gap-2">
+                            <Button
+                                variant="secondary"
+                                size="sm"
+                                className="h-8 shadow-sm backdrop-blur-md bg-white/80 hover:bg-white"
+                                onClick={() => fileInputRef.current?.click()}
+                            >
+                                Mudar Imagem
+                            </Button>
+                            <Button
+                                variant="destructive"
+                                size="sm"
+                                className="h-8 shadow-sm"
+                                onClick={() => onUpdate(slide.id, { image: undefined, file: undefined })}
+                            >
+                                <X className="h-4 w-4" />
+                            </Button>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="flex items-center gap-2 pt-2 border-t border-neutral-50">
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-neutral-500 hover:text-blue-500 hover:bg-blue-50"
+                            onClick={() => fileInputRef.current?.click()}
+                        >
+                            <ImageIcon className="mr-2 h-4 w-4" /> Adicionar Imagem
+                        </Button>
+                    </div>
+                )}
+
+                <input
+                    type="file"
+                    ref={fileInputRef}
+                    className="hidden"
+                    accept="image/*"
+                    onChange={handleImageUpload}
                 />
             </CardContent>
 

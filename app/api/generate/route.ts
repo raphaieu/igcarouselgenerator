@@ -6,13 +6,13 @@ export async function POST(req: Request) {
     // Mock AI response
     // In v2: Call OpenAI/Anthropic here
     const slides = [
-        { title: "Intro", content: `Here are 5 secrets about ${topic} that nobody tells you.` },
-        { title: "Point 1", content: "1. Consistency is key. You can't just do it once and expect results." },
-        { title: "Point 2", content: "2. Focus on quality over quantity. Better to have 1 great thing than 10 mediocre ones." },
-        { title: "Point 3", content: "3. Engage with your audience. Ask questions and reply to comments." },
-        { title: "Point 4", content: "4. Analyze your data. See what works and what doesn't." },
-        { title: "Point 5", content: "5. Have fun! If you're not enjoying it, it will show." },
-        { title: "Outro", content: "Did you find this helpful? Save this post for later! 📌" },
+        { title: "Intro", content: `Aqui estão 5 segredos sobre ${topic} que ninguém te conta.` },
+        { title: "Ponto 1", content: "1. Consistência é a chave. Você não pode fazer apenas uma vez e esperar resultados." },
+        { title: "Ponto 2", content: "2. Foque na qualidade sobre a quantidade. É melhor ter 1 coisa ótima do que 10 medíocres." },
+        { title: "Ponto 3", content: "3. Engaje com sua audiência. Faça perguntas e responda aos comentários." },
+        { title: "Ponto 4", content: "4. Analise seus dados. Veja o que funciona e o que não funciona." },
+        { title: "Ponto 5", content: "5. Divirta-se! Se você não está gostando, isso vai transparecer." },
+        { title: "Outro", content: "Achou isso útil? Salve este post para depois! 📌" },
     ];
 
     // Simulate network delay

@@ -34,7 +34,7 @@ export function PaymentDialog({ open, onOpenChange, onSuccess }: PaymentDialogPr
 
     const copyPix = () => {
         navigator.clipboard.writeText("00020126580014BR.GOV.BCB.PIX0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5913CarouselGen6008Brasilia62070503***63041D3D");
-        toast.success("PIX code copied!");
+        toast.success("Código PIX copiado!");
     };
 
     const handlePaymentCheck = async () => {
@@ -51,20 +51,20 @@ export function PaymentDialog({ open, onOpenChange, onSuccess }: PaymentDialogPr
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
-                    <DialogTitle>Get your Carousel</DialogTitle>
+                    <DialogTitle>Garanta seu Carrossel</DialogTitle>
                     <DialogDescription>
-                        High-quality, watermark-free images delivered to your email.
+                        Imagens em alta qualidade, sem marca d'água, entregues no seu email.
                     </DialogDescription>
                 </DialogHeader>
 
                 {step === "email" && (
                     <form onSubmit={handleEmailSubmit} className="space-y-4">
                         <div className="space-y-2">
-                            <Label htmlFor="email">Email address</Label>
+                            <Label htmlFor="email">Endereço de email</Label>
                             <Input
                                 id="email"
                                 type="email"
-                                placeholder="you@example.com"
+                                placeholder="seu@email.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
@@ -72,7 +72,7 @@ export function PaymentDialog({ open, onOpenChange, onSuccess }: PaymentDialogPr
                         </div>
                         <DialogFooter>
                             <Button type="submit" className="w-full">
-                                Continue to Payment
+                                Continuar para Pagamento
                             </Button>
                         </DialogFooter>
                     </form>
@@ -82,9 +82,9 @@ export function PaymentDialog({ open, onOpenChange, onSuccess }: PaymentDialogPr
                     <div className="space-y-6">
                         <div className="flex flex-col items-center justify-center space-y-2 border rounded-lg p-6 bg-neutral-50">
                             <div className="h-40 w-40 bg-white border-2 border-dashed border-neutral-300 flex items-center justify-center text-neutral-400">
-                                [QR CODE MOCK]
+                                [MOCK DE QR CODE]
                             </div>
-                            <p className="text-sm font-medium text-neutral-600">Scan to pay with PIX</p>
+                            <p className="text-sm font-medium text-neutral-600">Escaneie para pagar com PIX</p>
                             <p className="text-2xl font-bold text-neutral-900">R$ 9,90</p>
                         </div>
 
@@ -102,7 +102,7 @@ export function PaymentDialog({ open, onOpenChange, onSuccess }: PaymentDialogPr
                         <DialogFooter>
                             <Button onClick={handlePaymentCheck} disabled={loading} className="w-full">
                                 {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CreditCard className="mr-2 h-4 w-4" />}
-                                {loading ? "Verifying..." : "I have paid"}
+                                {loading ? "Verificando..." : "Já realizei o pagamento"}
                             </Button>
                         </DialogFooter>
                     </div>
@@ -113,12 +113,12 @@ export function PaymentDialog({ open, onOpenChange, onSuccess }: PaymentDialogPr
                         <div className="h-12 w-12 rounded-full bg-green-100 text-green-600 flex items-center justify-center">
                             <CheckCircle2 className="h-6 w-6" />
                         </div>
-                        <h3 className="text-lg font-semibold">Payment Confirmed!</h3>
+                        <h3 className="text-lg font-semibold">Pagamento Confirmado!</h3>
                         <p className="text-center text-neutral-500 text-sm px-4">
-                            We are generating your high-quality images. You will receive an email at <strong>{email}</strong> shortly.
+                            Estamos gerando suas imagens em alta qualidade. Você receberá um email em <strong>{email}</strong> em breve.
                         </p>
                         <Button onClick={() => onOpenChange(false)} variant="outline" className="mt-4">
-                            Close
+                            Fechar
                         </Button>
                     </div>
                 )}

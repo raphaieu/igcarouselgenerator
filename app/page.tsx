@@ -15,15 +15,15 @@ export default function Home() {
       </h1>
 
       <p className="mb-8 max-w-md text-lg text-neutral-600">
-        Create engaging, minimalist Instagram carousels from a simple idea.
-        Powered by AI. Mobile-first.
+        Crie carrosséis envolventes e minimalistas para o Instagram a partir de uma simples ideia.
+        Alimentado por IA. Mobile-first.
       </p>
 
       <div className="flex flex-col gap-4 sm:flex-row">
         <SignedOut>
           <SignInButton mode="modal">
             <Button size="lg" className="gap-2 rounded-full px-8 text-base font-medium">
-              Get Started <ArrowRight className="h-4 w-4" />
+              Começar Agora <ArrowRight className="h-4 w-4" />
             </Button>
           </SignInButton>
         </SignedOut>
@@ -31,14 +31,14 @@ export default function Home() {
         <SignedIn>
           <Link href="/dashboard">
             <Button size="lg" className="gap-2 rounded-full px-8 text-base font-medium">
-              Go to Dashboard <ArrowRight className="h-4 w-4" />
+              Ir para o Dashboard <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>
         </SignedIn>
       </div>
 
       <footer className="absolute bottom-6 text-sm text-neutral-400">
-        © 2026 CarouselGen. Built by @raphaieu
+        © 2026 CarouselGen. Desenvolvido por @raphaieu
       </footer>
     </main>
   );

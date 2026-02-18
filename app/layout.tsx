@@ -7,8 +7,8 @@ import { Toaster } from "@/components/ui/sonner";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "CarouselGen - Create Instagram Carousels in Seconds",
-  description: "Mobile-first Instagram carousel generator powered by AI.",
+  title: "CarouselGen - Crie Carrosséis do Instagram em Segundos",
+  description: "Gerador de carrosséis para Instagram mobile-first alimentado por IA.",
 };
 
 export default function RootLayout({
@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en">
+      <html lang="pt-BR">
         <body className={`${inter.className} min-h-screen bg-neutral-50 text-neutral-900 antialiased`}>
           {children}
           <Toaster />

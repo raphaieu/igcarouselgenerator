@@ -20,7 +20,7 @@ export default function Dashboard() {
     const [showPayment, setShowPayment] = useState(false);
 
     const handleGenerate = async () => {
-        if (!topic.trim()) return toast.error("Please enter a topic");
+        if (!topic.trim()) return toast.error("Por favor, insira um tópico");
 
         setIsGenerating(true);
         try {
@@ -29,13 +29,13 @@ export default function Dashboard() {
                 body: JSON.stringify({ topic }),
             });
 
-            if (!response.ok) throw new Error("Failed to generate");
+            if (!response.ok) throw new Error("Falha ao gerar");
 
             const data = await response.json();
             setSlides(data.slides.map((s: any) => ({ ...s, id: uuidv4() })));
-            toast.success("Carousel generated!");
+            toast.success("Carrossel gerado!");
         } catch (error) {
-            toast.error("Something went wrong. Try again.");
+            toast.error("Algo deu errado. Tente novamente.");
         } finally {
             setIsGenerating(false);
         }
@@ -51,7 +51,7 @@ export default function Dashboard() {
 
     const handlePaymentSuccess = async (email: string) => {
         // Call API to generate ZIP
-        toast.info("Generating your carousel... please wait.");
+        toast.info("Gerando seu carrossel... por favor aguarde.");
 
         try {
             const response = await fetch('/api/deliver', {
@@ -60,12 +60,12 @@ export default function Dashboard() {
                 body: JSON.stringify({ slides, email })
             });
 
-            if (!response.ok) throw new Error("Failed to deliver");
+            if (!response.ok) throw new Error("Falha na entrega");
 
-            toast.success(`Sent! Check your email at ${email}`);
+            toast.success(`Enviado! Verifique seu email em ${email}`);
             setShowPayment(false);
         } catch (error) {
-            toast.error("Failed to process delivery. Try again.");
+            toast.error("Falha ao processar a entrega. Tente novamente.");
         }
     };
 
@@ -87,7 +87,7 @@ export default function Dashboard() {
                             onClick={() => setShowPayment(true)}
                             className="rounded-full shadow-lg shadow-blue-500/20"
                         >
-                            Export <Download className="ml-2 h-4 w-4" />
+                            Exportar <Download className="ml-2 h-4 w-4" />
                         </Button>
                     </div>
                 </div>
@@ -96,10 +96,10 @@ export default function Dashboard() {
             <main className="mx-auto max-w-5xl px-4 pt-8">
                 {/* Input Section */}
                 <section className="mb-12 space-y-4 text-center">
-                    <h2 className="text-2xl font-bold tracking-tight">What do you want to create?</h2>
+                    <h2 className="text-2xl font-bold tracking-tight">Qual conteúdo quer gerar / repassar?</h2>
                     <div className="mx-auto max-w-2xl relative">
                         <Textarea
-                            placeholder="E.g. 5 tips for better sleep, How to start coding..."
+                            placeholder="Ex: 5 dicas para dormir melhor, Como começar a programar..."
                             className="resize-none rounded-2xl border-neutral-200 p-4 text-lg shadow-sm focus-visible:ring-black min-h-[120px]"
                             value={topic}
                             onChange={(e) => setTopic(e.target.value)}
@@ -110,7 +110,7 @@ export default function Dashboard() {
                                 className="rounded-xl"
                                 disabled={isGenerating || !topic}
                             >
-                                {isGenerating ? "Generating..." : "Generate with AI"}
+                                {isGenerating ? "Gerando..." : "Gerar com IA"}
                                 <Sparkles className="ml-2 h-4 w-4" />
                             </Button>
                         </div>
@@ -123,7 +123,7 @@ export default function Dashboard() {
                         {/* Left: Editor */}
                         <div className="space-y-6">
                             <div className="flex items-center justify-between">
-                                <h3 className="text-xl font-semibold">Edit Slides</h3>
+                                <h3 className="text-xl font-semibold">Editar Slides</h3>
                                 <span className="text-sm text-neutral-400">{slides.length} slides</span>
                             </div>
 
@@ -144,14 +144,14 @@ export default function Dashboard() {
                                 className="w-full border-dashed p-8 text-neutral-400 hover:border-neutral-400 hover:text-neutral-600"
                                 onClick={() => setSlides([...slides, { id: uuidv4(), title: "", content: "" }])}
                             >
-                                + Add Slide
+                                + Adicionar Slide
                             </Button>
                         </div>
 
                         {/* Right: Preview (Sticky) */}
                         <div className="hidden lg:block">
                             <div className="sticky top-24 space-y-4">
-                                <h3 className="text-xl font-semibold">Live Preview</h3>
+                                <h3 className="text-xl font-semibold">Preview Ao Vivo</h3>
                                 <div className="rounded-2xl border bg-neutral-900 p-4 shadow-2xl">
                                     <div className="mb-4 flex items-center gap-2 border-b border-neutral-800 pb-2">
                                         <div className="h-2 w-2 rounded-full bg-red-500" />
@@ -159,9 +159,6 @@ export default function Dashboard() {
                                         <div className="h-2 w-2 rounded-full bg-green-500" />
                                         <span className="ml-2 text-xs font-mono text-neutral-500">Instagram</span>
                                     </div>
-                                    {/* We reuse PreviewCarousel but style it a bit differently for desktop sidebar? 
-                       Actually PreviewCarousel is horizontal scroll. 
-                       Let's just show standard PreviewCarousel here or a mobile mock. */}
                                     <div className="overflow-hidden rounded-lg bg-white">
                                         <PreviewCarousel slides={slides} user={user ? {
                                             id: user.id,
