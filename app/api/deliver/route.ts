@@ -12,7 +12,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const { slides, email } = await req.json();
+        const { slides, email, forceVerified, customImage } = await req.json();
 
         if (!slides || !email) {
             return NextResponse.json({ error: 'Missing slides or email' }, { status: 400 });
@@ -22,8 +22,10 @@ export async function POST(req: Request) {
             id: user.id,
             clerkId: user.id,
             email: user.emailAddresses[0]?.emailAddress || "",
-            name: `${user.firstName} ${user.lastName}`.trim() || "User",
-            imageUrl: user.imageUrl
+            name: (user.fullName?.replace(" null", "") || user.firstName || "User").trim(),
+            imageUrl: user.imageUrl,
+            customImageUrl: customImage || undefined,
+            forceVerified: forceVerified || false
         };
 
         // 1. Generate Images

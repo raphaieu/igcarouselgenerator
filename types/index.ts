@@ -22,4 +22,7 @@ export interface User {
     clerkId: string;
     name?: string;
     imageUrl?: string;
+    customImageUrl?: string;
+    isVerified?: boolean;
+    forceVerified?: boolean;
 }

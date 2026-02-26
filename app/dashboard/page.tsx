@@ -8,16 +8,39 @@ import { EditableCard } from "@/components/EditableCard";
 import { PreviewCarousel } from "@/components/PreviewCarousel";
 import { PaymentDialog } from "@/components/PaymentDialog";
 import { Slide } from "@/types";
-import { Sparkles, Download, ArrowRight, LayoutTemplate } from "lucide-react";
+import { Sparkles, Download, ArrowRight, LayoutTemplate, Camera, Pencil, Trash2, X as XIcon } from "lucide-react";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
+import { useRef } from "react";
+import Image from "next/image";
 
 export default function Dashboard() {
     const { user } = useUser();
     const [topic, setTopic] = useState("");
-    const [slides, setSlides] = useState<Slide[]>([]);
+    const [slides, setSlides] = useState<Slide[]>([
+        { id: uuidv4(), title: "Intro", content: "" }
+    ]);
     const [isGenerating, setIsGenerating] = useState(false);
     const [showPayment, setShowPayment] = useState(false);
+    const [forceVerified, setForceVerified] = useState(false);
+    const [customImage, setCustomImage] = useState<string | null>(null);
+    const profileInputRef = useRef<HTMLInputElement>(null);
+
+    // Clean user name from " null" and handle missing lastName
+    const getCleanName = () => {
+        if (!user) return "";
+        return user.fullName?.replace(" null", "") || user.firstName || "";
+    };
+
+    const handleProfileImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        if (file.size > 2 * 1024 * 1024) return toast.error("Imagem muito grande. Máximo 2MB.");
+
+        const reader = new FileReader();
+        reader.onload = (event) => setCustomImage(event.target?.result as string);
+        reader.readAsDataURL(file);
+    };
 
     const handleGenerate = async () => {
         if (!topic.trim()) return toast.error("Por favor, insira um tópico");
@@ -57,7 +80,7 @@ export default function Dashboard() {
             const response = await fetch('/api/deliver', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ slides, email })
+                body: JSON.stringify({ slides, email, forceVerified, customImage })
             });
 
             if (!response.ok) throw new Error("Falha na entrega");
@@ -78,10 +101,8 @@ export default function Dashboard() {
                         <LayoutTemplate className="h-6 w-6" />
                         <span className="font-bold text-lg hidden sm:inline-block">CarouselGen</span>
                     </div>
+
                     <div className="flex items-center gap-4">
-                        <span className="text-sm text-neutral-500 hidden sm:inline-block">
-                            {user?.fullName || user?.firstName}
-                        </span>
                         <Button
                             disabled={slides.length === 0}
                             onClick={() => setShowPayment(true)}
@@ -89,6 +110,49 @@ export default function Dashboard() {
                         >
                             Exportar <Download className="ml-2 h-4 w-4" />
                         </Button>
+
+                        <div className="flex items-center gap-2 group relative">
+                            <input
+                                type="file"
+                                ref={profileInputRef}
+                                className="hidden"
+                                accept="image/*"
+                                onChange={handleProfileImageUpload}
+                            />
+                            <div
+                                className="relative h-10 w-10 cursor-pointer overflow-hidden rounded-full border border-neutral-200 bg-neutral-100 transition-all hover:ring-2 hover:ring-blue-500/20 shrink-0"
+                                onClick={() => profileInputRef.current?.click()}
+                            >
+                                {customImage || user?.imageUrl ? (
+                                    <Image
+                                        src={customImage || user?.imageUrl!}
+                                        alt="Profile"
+                                        fill
+                                        className="object-cover"
+                                    />
+                                ) : (
+                                    <div className="flex h-full w-full items-center justify-center text-neutral-400">
+                                        <Camera className="h-4 w-4" />
+                                    </div>
+                                )}
+
+                                <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
+                                    {customImage ? <XIcon className="h-4 w-4 text-white" /> : <Pencil className="h-4 w-4 text-white" />}
+                                </div>
+                            </div>
+
+                            {customImage && (
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setCustomImage(null);
+                                    }}
+                                    className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] text-white shadow-sm hover:bg-red-600 cursor-pointer z-10"
+                                >
+                                    <XIcon className="h-2.5 w-2.5" />
+                                </button>
+                            )}
+                        </div>
                     </div>
                 </div>
             </header>
@@ -104,7 +168,22 @@ export default function Dashboard() {
                             value={topic}
                             onChange={(e) => setTopic(e.target.value)}
                         />
-                        <div className="absolute bottom-3 right-3">
+                        <div className="absolute bottom-3 right-3 flex items-center gap-4">
+                            <div className="flex items-center gap-2 mr-2">
+                                <label
+                                    htmlFor="force-verified"
+                                    className="text-xs font-medium text-neutral-500 cursor-pointer select-none flex items-center gap-1"
+                                >
+                                    Forçar Verificado
+                                    <input
+                                        id="force-verified"
+                                        type="checkbox"
+                                        checked={forceVerified}
+                                        onChange={(e) => setForceVerified(e.target.checked)}
+                                        className="h-3 w-3 accent-blue-500 rounded border-neutral-300 transition-all cursor-pointer"
+                                    />
+                                </label>
+                            </div>
                             <Button
                                 onClick={handleGenerate}
                                 className="rounded-xl"
@@ -119,7 +198,7 @@ export default function Dashboard() {
 
                 {/* Editor & Preview Split */}
                 {slides.length > 0 && (
-                    <div className="grid gap-12 lg:grid-cols-[1fr_340px]">
+                    <div className="grid gap-12 lg:grid-cols-[1fr_400px]">
                         {/* Left: Editor */}
                         <div className="space-y-6">
                             <div className="flex items-center justify-between">
@@ -164,8 +243,10 @@ export default function Dashboard() {
                                             id: user.id,
                                             email: user.primaryEmailAddress?.emailAddress!,
                                             clerkId: user.id,
-                                            name: user.fullName || "",
-                                            imageUrl: user.imageUrl
+                                            name: getCleanName(),
+                                            imageUrl: user.imageUrl,
+                                            customImageUrl: customImage || undefined,
+                                            forceVerified: forceVerified
                                         } : null} />
                                     </div>
                                 </div>
@@ -182,8 +263,10 @@ export default function Dashboard() {
                             id: user.id,
                             email: user.primaryEmailAddress?.emailAddress!,
                             clerkId: user.id,
-                            name: user.fullName || "",
-                            imageUrl: user.imageUrl
+                            name: getCleanName(),
+                            imageUrl: user.imageUrl,
+                            customImageUrl: customImage || undefined,
+                            forceVerified: forceVerified
                         } : null} />
                     </div>
                 )}

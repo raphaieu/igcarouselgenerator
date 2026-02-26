@@ -4,7 +4,7 @@ import { Slide } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { Image as ImageIcon, Sparkles, X, Upload } from "lucide-react";
+import { Image as ImageIcon, Sparkles, X, Upload, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useRef } from "react";
 import { toast } from "sonner";
@@ -47,7 +47,7 @@ export function EditableCard({ slide, index, onUpdate, onRemove }: EditableCardP
                 Slide {index + 1}
             </CardHeader>
 
-            <CardContent className="space-y-4 p-4">
+            <CardContent className="space-y-4 p-4 pb-2">
                 {/* Text Area (Primary) */}
                 <Textarea
                     placeholder="Escreva seu texto aqui..."
@@ -57,43 +57,14 @@ export function EditableCard({ slide, index, onUpdate, onRemove }: EditableCardP
                 />
 
                 {/* Media Attachment Area */}
-                {slide.image ? (
-                    <div className="relative mt-4 aspect-video w-full overflow-hidden rounded-md border border-neutral-200">
+                {slide.image && (
+                    <div className="relative mt-2 aspect-video w-full overflow-hidden rounded-md border border-neutral-100">
                         <Image
                             src={slide.image}
                             alt="Slide visual"
                             fill
                             className="object-cover"
                         />
-                        <div className="absolute right-2 top-2 z-10 flex gap-2">
-                            <Button
-                                variant="secondary"
-                                size="sm"
-                                className="h-8 shadow-sm backdrop-blur-md bg-white/80 hover:bg-white"
-                                onClick={() => fileInputRef.current?.click()}
-                            >
-                                Mudar Imagem
-                            </Button>
-                            <Button
-                                variant="destructive"
-                                size="sm"
-                                className="h-8 shadow-sm"
-                                onClick={() => onUpdate(slide.id, { image: undefined, file: undefined })}
-                            >
-                                <X className="h-4 w-4" />
-                            </Button>
-                        </div>
-                    </div>
-                ) : (
-                    <div className="flex items-center gap-2 pt-2 border-t border-neutral-50">
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            className="text-neutral-500 hover:text-blue-500 hover:bg-blue-50"
-                            onClick={() => fileInputRef.current?.click()}
-                        >
-                            <ImageIcon className="mr-2 h-4 w-4" /> Adicionar Imagem
-                        </Button>
                     </div>
                 )}
 
@@ -106,15 +77,36 @@ export function EditableCard({ slide, index, onUpdate, onRemove }: EditableCardP
                 />
             </CardContent>
 
-            <CardFooter className="bg-neutral-50/50 px-4 py-2">
-                {/* Footer branding preview mock */}
-                <div className="flex items-center gap-2 w-full">
-                    <div className="h-6 w-6 rounded-full bg-neutral-200" />
-                    <div className="flex flex-col">
-                        <div className="h-2 w-16 bg-neutral-200 rounded" />
-                        <div className="mt-1 h-1.5 w-10 bg-neutral-100 rounded" />
+            <CardFooter className="bg-neutral-50/50 px-4 py-2 flex items-center justify-between min-h-[44px]">
+                {slide.image ? (
+                    <div className="flex items-center gap-2 w-full justify-between">
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-8 text-neutral-500 hover:text-blue-500 hover:bg-blue-50"
+                            onClick={() => fileInputRef.current?.click()}
+                        >
+                            <Upload className="mr-2 h-4 w-4" /> Mudar Imagem
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-red-500 hover:text-red-600 hover:bg-red-50"
+                            onClick={() => onUpdate(slide.id, { image: undefined, file: undefined })}
+                        >
+                            <Trash2 className="h-4 w-4" />
+                        </Button>
                     </div>
-                </div>
+                ) : (
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-neutral-500 hover:text-blue-500 hover:bg-blue-50"
+                        onClick={() => fileInputRef.current?.click()}
+                    >
+                        <ImageIcon className="mr-2 h-4 w-4" /> Adicionar Imagem
+                    </Button>
+                )}
             </CardFooter>
         </Card>
     );
