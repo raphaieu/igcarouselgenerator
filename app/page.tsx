@@ -8,7 +8,7 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-center p-6 text-center">
       <div className="flex items-center justify-center overflow-hidden">
         <video
-          src="/logo.mp4"
+          src="https://ckao.in/carouselgen-logo.mp4"
           autoPlay
           loop
           muted
