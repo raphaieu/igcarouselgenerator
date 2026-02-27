@@ -67,7 +67,7 @@ export async function generateSlideImage(slide: Slide, index: number, user: User
                         )}
                     </div>
                     <span style={{ fontSize: '32px', color: '#737373' }}>
-                        @{user.name?.toLowerCase().replace(/\s+/g, '').replace('null', '') || "handle"}
+                        @{user.handle || "handle"}
                     </span>
                 </div>
             </div>

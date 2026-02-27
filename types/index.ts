@@ -21,6 +21,9 @@ export interface User {
     email: string;
     clerkId: string;
     name?: string;
+    firstName?: string;
+    lastName?: string;
+    handle?: string;
     imageUrl?: string;
     customImageUrl?: string;
     isVerified?: boolean;

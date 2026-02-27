@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="pt-BR">
-        <body className={`${inter.className} min-h-screen bg-neutral-50 text-neutral-900 antialiased`}>
+        <body className={`${inter.className} min-h-screen text-neutral-900 antialiased`}>
           {children}
           <Toaster />
         </body>

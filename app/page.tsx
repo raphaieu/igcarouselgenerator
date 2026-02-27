@@ -6,17 +6,21 @@ import Link from "next/link";
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-6 text-center">
-      <div className="mb-8 flex h-16 w-16 items-center justify-center rounded-2xl bg-black text-white shadow-xl">
-        <Sparkles className="h-8 w-8" />
+      <div className="flex items-center justify-center overflow-hidden">
+        <video
+          src="/logo.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="h-full w-full object-cover"
+        />
       </div>
-
       <h1 className="mb-4 text-4xl font-extrabold tracking-tight sm:text-5xl">
-        CarouselGen
+        tabajara
       </h1>
-
       <p className="mb-8 max-w-md text-lg text-neutral-600">
         Crie carrosséis envolventes e minimalistas para o Instagram a partir de uma simples ideia.
-        Alimentado por IA. Mobile-first.
       </p>
 
       <div className="flex flex-col gap-4 sm:flex-row">
@@ -38,7 +42,7 @@ export default function Home() {
       </div>
 
       <footer className="absolute bottom-6 text-sm text-neutral-400">
-        © 2026 CarouselGen. Desenvolvido por @raphaieu
+        © 2026 CarouselGen. Desenvolvido por <a href="https://instagram.com/raphaieu" target="_blank" rel="noopener noreferrer" className="hover:text-neutral-600 transition-colors">@raphaieu</a>
       </footer>
     </main>
   );

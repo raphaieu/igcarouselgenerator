@@ -43,7 +43,7 @@ export function PreviewCarousel({ slides, user }: PreviewCarouselProps) {
                                             </svg>
                                         )}
                                     </div>
-                                    <span className="text-xs text-neutral-500 font-medium">@{user?.name?.toLowerCase().replace(/\s+/g, '').replace('null', '') || "handle"}</span>
+                                    <span className="text-xs text-neutral-500 font-medium">@{user?.handle || "handle"}</span>
                                 </div>
                             </div>
 

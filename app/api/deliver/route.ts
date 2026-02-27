@@ -12,7 +12,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const { slides, email, forceVerified, customImage } = await req.json();
+        const { slides, email, forceVerified, customImage, firstName, lastName, handle } = await req.json();
 
         if (!slides || !email) {
             return NextResponse.json({ error: 'Missing slides or email' }, { status: 400 });
@@ -22,7 +22,10 @@ export async function POST(req: Request) {
             id: user.id,
             clerkId: user.id,
             email: user.emailAddresses[0]?.emailAddress || "",
-            name: (user.fullName?.replace(" null", "") || user.firstName || "User").trim(),
+            name: `${firstName} ${lastName}`.trim() || user.username || "User",
+            firstName,
+            lastName,
+            handle,
             imageUrl: user.imageUrl,
             customImageUrl: customImage || undefined,
             forceVerified: forceVerified || false
